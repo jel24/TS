@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Player : NetworkBehaviour {
 
@@ -11,12 +12,16 @@ public class Player : NetworkBehaviour {
 
 	private int curHealth;
 	private Animator animator;
+	private Canvas canvas;
+	private Text textArea;
 
 	// Use this for initialization
 	void Start () {
 		activeCam = FindObjectOfType<Camera>();
 		curHealth = maxHealth;
 		animator = GetComponent<Animator>();
+		canvas = FindObjectOfType<Canvas>();
+		textArea = canvas.GetComponentInChildren<Text>();
 	}
 	
 	// Update is called once per frame
@@ -43,18 +48,23 @@ public class Player : NetworkBehaviour {
 		animator.SetBool("attack", false);
 	}
 
+	public void StopDodging ()
+	{
+		animator.SetBool("dodge", false);
+	}
+
 	public void TakeDamage (int damage)
 	{
-
 		curHealth -= damage;
 
 		if (curHealth <= 0) { // death
 
-			print("You have died.");
+			textArea.text += "You have died.";
 			curHealth = maxHealth;
 			animator.SetBool("dead", true);
 
 		}
+
 
 	}
 }
