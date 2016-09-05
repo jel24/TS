@@ -6,7 +6,7 @@ public class Weapon : NetworkBehaviour {
 
 	public Player owner;
 	public int damage;
-
+	public int weaponCooldown;
 
 	private int internalCooldown = 0;
 	private AudioSource audioSource;
@@ -28,11 +28,11 @@ public class Weapon : NetworkBehaviour {
 
 		if (defender.GetComponent<Player>() && owner.GetComponent<Animator>().GetBool("attack")){
 			Player player = defender.GetComponent<Player>();
-			if (player != owner && internalCooldown == 0){
+			if (player != owner && internalCooldown == 0 && player.IsAlive()){
 
-				print("You hit a target.");
+				owner.textArea.text += ("You hit a target.\n");
 				audioSource.Play();
-				internalCooldown += 35;
+				internalCooldown += weaponCooldown;
 				player.TakeDamage(damage);
 
 			}

@@ -7,13 +7,15 @@ public class Player : NetworkBehaviour {
 
 	public bool entering = false;
 	public Camera activeCam;
-
+	public Text textArea;
 	public int maxHealth;
+
 
 	private int curHealth;
 	private Animator animator;
 	private Canvas canvas;
-	private Text textArea;
+
+	private bool alive = true;
 
 	// Use this for initialization
 	void Start () {
@@ -59,12 +61,16 @@ public class Player : NetworkBehaviour {
 
 		if (curHealth <= 0) { // death
 
-			textArea.text += "You have died.";
+			textArea.text += "You have died.\n";
 			curHealth = maxHealth;
 			animator.SetBool("dead", true);
+			this.alive = false;
 
 		}
+	}
 
-
+	public bool IsAlive ()
+	{
+		return alive;
 	}
 }
