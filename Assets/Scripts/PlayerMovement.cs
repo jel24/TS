@@ -44,11 +44,11 @@ public class PlayerMovement : NetworkBehaviour {
 				animator.SetBool ("walking", false);
 			}
 
-			if (CrossPlatformInputManager.GetButton("Fire1")){ // if attacking, don't move
+			if (CrossPlatformInputManager.GetButton("Fire1")){ // attack
 					animator.SetBool("attack", true);
 			}
 
-			if (CrossPlatformInputManager.GetButton("Fire2")){ // if attacking, don't move
+			if (CrossPlatformInputManager.GetButton("Fire2")){ // dodge
 					animator.SetBool("dodge", true);
 			}
 

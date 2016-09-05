@@ -28,7 +28,7 @@ public class Weapon : NetworkBehaviour {
 
 		if (defender.GetComponent<Player>() && owner.GetComponent<Animator>().GetBool("attack")){
 			Player player = defender.GetComponent<Player>();
-			if (!player.isLocalPlayer && internalCooldown == 0){
+			if (player != owner && internalCooldown == 0){
 
 				print("You hit a target.");
 				audioSource.Play();
