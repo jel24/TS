@@ -30,7 +30,8 @@ public class Weapon : NetworkBehaviour {
 			Player player = defender.GetComponent<Player>();
 			if (player != owner && internalCooldown == 0 && player.IsAlive()){
 
-				owner.textArea.text += ("You hit a target.\n");
+				owner.writeMessageLocal("You hit a target.\n");
+				player.writeMessageLocal("You took damage.\n");
 				audioSource.Play();
 				internalCooldown += weaponCooldown;
 				player.TakeDamage(damage);

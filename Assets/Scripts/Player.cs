@@ -7,13 +7,14 @@ public class Player : NetworkBehaviour {
 
 	public bool entering = false;
 	public Camera activeCam;
-	public Text textArea;
+
 	public int maxHealth;
 
-
+	private GameObject healthBar;
 	private int curHealth;
 	private Animator animator;
 	private Canvas canvas;
+	private Text textArea;
 
 	private bool alive = true;
 
@@ -24,6 +25,7 @@ public class Player : NetworkBehaviour {
 		animator = GetComponent<Animator>();
 		canvas = FindObjectOfType<Canvas>();
 		textArea = canvas.GetComponentInChildren<Text>();
+		healthBar = GameObject.FindGameObjectWithTag("HealthBar");
 	}
 	
 	// Update is called once per frame
@@ -59,9 +61,13 @@ public class Player : NetworkBehaviour {
 	{
 		curHealth -= damage;
 
+		Rect barDimensions = healthBar.GetComponent<RectTransform>().rect;
+
+		healthBar.GetComponent<RectTransform>().sizeDelta = new Vector2( barDimensions.width * (curHealth / maxHealth * 1f), barDimensions.height);
+
 		if (curHealth <= 0) { // death
 
-			textArea.text += "You have died.\n";
+			writeMessageLocal("You have died.\n");
 			curHealth = maxHealth;
 			animator.SetBool("dead", true);
 			this.alive = false;
@@ -72,5 +78,19 @@ public class Player : NetworkBehaviour {
 	public bool IsAlive ()
 	{
 		return alive;
+	}
+
+	public void writeMessage (string text)
+	{
+		textArea.text += text;
+	}
+
+	public void writeMessageLocal (string text)
+	{
+		if (isLocalPlayer) {
+
+			textArea.text += text;
+
+		}
 	}
 }
