@@ -48,9 +48,9 @@ public class PlayerMovement : NetworkBehaviour {
 					animator.SetBool("attack", true);
 			}
 
-			if (CrossPlatformInputManager.GetButton("Fire2")){ // dodge
+			/*if (CrossPlatformInputManager.GetButton("Fire2")){ // dodge
 					animator.SetBool("dodge", true);
-			}
+			}*/
 
 
 		}

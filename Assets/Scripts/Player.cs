@@ -10,11 +10,13 @@ public class Player : NetworkBehaviour {
 
 	public int maxHealth;
 
-	private GameObject healthBar;
+	private Image healthBar;
 	private int curHealth;
 	private Animator animator;
 	private Canvas canvas;
+	private Text VPCounter;
 	private Text textArea;
+	private int victoryPoints;
 
 	private bool alive = true;
 
@@ -24,8 +26,9 @@ public class Player : NetworkBehaviour {
 		curHealth = maxHealth;
 		animator = GetComponent<Animator>();
 		canvas = FindObjectOfType<Canvas>();
-		textArea = canvas.GetComponentInChildren<Text>();
-		healthBar = GameObject.FindGameObjectWithTag("HealthBar");
+		textArea = GameObject.FindGameObjectWithTag("Feed").GetComponent<Text>();
+		healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Image>();
+		VPCounter = GameObject.FindGameObjectWithTag("VPCounter").GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
@@ -61,9 +64,7 @@ public class Player : NetworkBehaviour {
 	{
 		curHealth -= damage;
 
-		Rect barDimensions = healthBar.GetComponent<RectTransform>().rect;
-
-		healthBar.GetComponent<RectTransform>().sizeDelta = new Vector2( barDimensions.width * (curHealth / maxHealth * 1f), barDimensions.height);
+		UpdateHealthBar();
 
 		if (curHealth <= 0) { // death
 
@@ -72,6 +73,15 @@ public class Player : NetworkBehaviour {
 			animator.SetBool("dead", true);
 			this.alive = false;
 
+		}
+	}
+
+	private void UpdateHealthBar ()
+	{
+		if (isLocalPlayer) {
+			Rect barDimensions = healthBar.GetComponent<RectTransform>().rect;
+			writeMessageLocal("Updating bar size to " + barDimensions.width * (curHealth * 1f / maxHealth * 1f) + "\n");
+			healthBar.GetComponent<RectTransform>().sizeDelta = new Vector2( 188 * (curHealth * 1f / maxHealth * 1f), barDimensions.height);
 		}
 	}
 
@@ -92,5 +102,14 @@ public class Player : NetworkBehaviour {
 			textArea.text += text;
 
 		}
+	}
+
+	public void ScoreVP (int value)
+	{
+		victoryPoints += value;
+		if (isLocalPlayer) {
+			VPCounter.text = victoryPoints.ToString();
+		}
+
 	}
 }

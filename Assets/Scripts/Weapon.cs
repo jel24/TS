@@ -24,17 +24,23 @@ public class Weapon : NetworkBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider defender){
+	void OnTriggerEnter (Collider defender)
+	{
 
-		if (defender.GetComponent<Player>() && owner.GetComponent<Animator>().GetBool("attack")){
-			Player player = defender.GetComponent<Player>();
-			if (player != owner && internalCooldown == 0 && player.IsAlive()){
+		if (defender.GetComponent<Player> () && owner.GetComponent<Animator> ().GetBool ("attack")) {
+			Player defendingPlayer = defender.GetComponent<Player> ();
+			if (defendingPlayer != owner && internalCooldown == 0 && defendingPlayer.IsAlive ()) {
 
-				owner.writeMessageLocal("You hit a target.\n");
-				player.writeMessageLocal("You took damage.\n");
-				audioSource.Play();
+
+				defendingPlayer.writeMessageLocal ("You took damage.\n");
+				audioSource.Play ();
 				internalCooldown += weaponCooldown;
-				player.TakeDamage(damage);
+				defendingPlayer.TakeDamage (damage);
+				if (!defendingPlayer.IsAlive ()) {
+					owner.ScoreVP(2);
+					defendingPlayer.ScoreVP(-2);
+					owner.writeMessageLocal ("Kill confirmed.\n");
+				}
 
 			}
 		}
