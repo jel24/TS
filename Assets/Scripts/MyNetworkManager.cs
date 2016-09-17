@@ -11,6 +11,7 @@ public class MyNetworkManager : NetworkManager {
 
 		Debug.Log(Time.timeSinceLevelLoad + " -- starting host.");
 		StartHost();
+		StartClient();
 
 	}
 

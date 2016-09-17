@@ -10,11 +10,13 @@ public class PlayerMovement : NetworkBehaviour {
 
 	private Player player;
 	private Animator animator;
+	private NetworkManager man;
 
 	// Use this for initialization
 	void Start () {
 		animator = this.GetComponent<Animator>();
 		player = this.GetComponent<Player>();
+		man = GameObject.FindObjectOfType<NetworkManager>();
 	}
 	
 	// Update is called once per frame
@@ -45,12 +47,17 @@ public class PlayerMovement : NetworkBehaviour {
 			}
 
 			if (CrossPlatformInputManager.GetButton("Fire1")){ // attack
-					animator.SetBool("attack", true);
+					if (animator.GetBool("attack") == false){
+						animator.SetBool("attack", true);
+					}
 			}
 
-			/*if (CrossPlatformInputManager.GetButton("Fire2")){ // dodge
-					animator.SetBool("dodge", true);
-			}*/
+			if (CrossPlatformInputManager.GetButtonDown("Fire2")){ // dodge
+
+					bool onOff = man.gameObject.activeSelf;
+					player.writeMessageLocal("Your network HUD is on: " + !onOff + "\n");
+					man.gameObject.SetActive(!onOff);
+			}
 
 
 		}

@@ -107,6 +107,11 @@ public class Player : NetworkBehaviour {
 	public void ScoreVP (int value)
 	{
 		victoryPoints += value;
+
+		if (victoryPoints <= 0) {
+			victoryPoints = 0;
+		}
+
 		if (isLocalPlayer) {
 			VPCounter.text = victoryPoints.ToString();
 		}
