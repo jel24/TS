@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class Weapon : NetworkBehaviour {
+public class Weapon : MonoBehaviour {
 
 	public Player owner;
 	public int damage;
@@ -32,14 +32,14 @@ public class Weapon : NetworkBehaviour {
 			if (defendingPlayer != owner && internalCooldown == 0 && defendingPlayer.IsAlive ()) {
 
 
-				defendingPlayer.writeMessageLocal ("You took damage.\n");
+				// defendingPlayer.writeMessageLocal ("You took damage.\n");
 				audioSource.Play ();
 				internalCooldown += weaponCooldown;
 				defendingPlayer.TakeDamage (damage);
 				if (!defendingPlayer.IsAlive ()) {
 					owner.ScoreVP(2);
 					defendingPlayer.ScoreVP(-2);
-					owner.writeMessageLocal ("Kill confirmed.\n");
+					owner.writeMessageLocal ("Kill confirmed. +2 VP\n");
 				}
 
 			}

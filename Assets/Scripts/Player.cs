@@ -15,8 +15,10 @@ public class Player : NetworkBehaviour {
 	private Animator animator;
 	private Canvas canvas;
 	private Text VPCounter;
-	private Text textArea;
+	private FeedManager feed;
 	private int victoryPoints;
+	private Vector3 respawnLoc;
+	private Camera respawnCam;
 
 	private bool alive = true;
 
@@ -26,9 +28,11 @@ public class Player : NetworkBehaviour {
 		curHealth = maxHealth;
 		animator = GetComponent<Animator>();
 		canvas = FindObjectOfType<Canvas>();
-		textArea = GameObject.FindGameObjectWithTag("Feed").GetComponent<Text>();
+		feed = GameObject.FindObjectOfType<FeedManager>();
 		healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Image>();
 		VPCounter = GameObject.FindGameObjectWithTag("VPCounter").GetComponent<Text>();
+		respawnLoc = GameObject.FindGameObjectWithTag("Respawn").GetComponent<Transform>().position;
+		respawnCam = activeCam;
 	}
 	
 	// Update is called once per frame
@@ -68,10 +72,7 @@ public class Player : NetworkBehaviour {
 
 		if (curHealth <= 0) { // death
 
-			writeMessageLocal("You have died.\n");
-			curHealth = maxHealth;
-			animator.SetBool("dead", true);
-			this.alive = false;
+			Die();
 
 		}
 	}
@@ -80,9 +81,35 @@ public class Player : NetworkBehaviour {
 	{
 		if (isLocalPlayer) {
 			Rect barDimensions = healthBar.GetComponent<RectTransform>().rect;
-			writeMessageLocal("Updating bar size to " + barDimensions.width * (curHealth * 1f / maxHealth * 1f) + "\n");
+			// writeMessageLocal("Updating bar size to " + barDimensions.width * (curHealth * 1f / maxHealth * 1f));
 			healthBar.GetComponent<RectTransform>().sizeDelta = new Vector2( 188 * (curHealth * 1f / maxHealth * 1f), barDimensions.height);
 		}
+	}
+
+	private void Die ()
+	{
+
+		if (isLocalPlayer) {
+
+			writeMessageLocal("You will respawn in 20 seconds.");
+			writeMessageLocal("You have died.");
+			curHealth = maxHealth;
+			animator.SetBool("dead", true);
+			this.alive = false;
+			Invoke("Respawn", 20);
+		}
+
+	}
+
+	private void Respawn ()
+	{
+		activeCam.gameObject.SetActive(false);
+		activeCam = respawnCam;
+		activeCam.gameObject.SetActive(true);
+		this.transform.position = respawnLoc;
+		this.alive = true;
+		animator.SetBool("dead", false);
+		UpdateHealthBar();
 	}
 
 	public bool IsAlive ()
@@ -92,14 +119,14 @@ public class Player : NetworkBehaviour {
 
 	public void writeMessage (string text)
 	{
-		textArea.text += text;
+		feed.Write(text);
 	}
 
 	public void writeMessageLocal (string text)
 	{
 		if (isLocalPlayer) {
 
-			textArea.text += text;
+			feed.Write(text);
 
 		}
 	}
