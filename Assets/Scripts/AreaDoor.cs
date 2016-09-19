@@ -12,14 +12,9 @@ public class AreaDoor : MonoBehaviour {
 		if (collider.tag == "Player") { // player moving through door
 			Player player = collider.GetComponent<Player> (); // player entering or leaving
 
-			if (player.entering) { // move into current room
-				player.transform.Translate (Vector3.forward * 5);
-				player.entering = false;
-			} else { // move to another room
-				player.entering = true;
-				player.transform.position = target.transform.position;
-				player.SwitchCamera(target.camera);
-			}
+			player.transform.position = target.transform.position;
+			player.transform.Translate (Vector3.forward * 5);
+			player.SwitchCamera(target.camera);
 
 
 		}

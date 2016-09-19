@@ -7,6 +7,7 @@ public class Player : NetworkBehaviour {
 
 	public bool entering = false;
 	public Camera activeCam;
+	public string name;
 
 	public int maxHealth;
 
@@ -143,5 +144,15 @@ public class Player : NetworkBehaviour {
 			VPCounter.text = victoryPoints.ToString();
 		}
 
+	}
+
+	public void SetName (string text)
+	{
+		this.name = text;
+	}
+
+	public string GetName ()
+	{
+		return name;
 	}
 }
