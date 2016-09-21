@@ -5,9 +5,6 @@ using System.Collections.Generic;
 public class ThroneManager : MonoBehaviour {
 
 	private List<Player> playerGroup;
-	private string[] names = {"Eadwig", "Salasmund", "Dannis", "Lideon", "Sully", "Randy", 
-										"Veniris", "Bandor", "Lyrra", "Rena", "Wanda", "Xekan", "Peato",
-										"Bandobald"};
 
 	private Player controller;
 
@@ -33,7 +30,6 @@ public class ThroneManager : MonoBehaviour {
 		Player player = collider.GetComponent<Player> ();
 		if (player != null) {
 			playerGroup.Add (player);
-			player.SetName (GetRandomName ());
 			if (playerGroup.Count > 1) {
 				player.writeMessageLocal ("Another currently controls the throne.");
 			}
@@ -56,17 +52,10 @@ public class ThroneManager : MonoBehaviour {
 
 	}
 
-	private string GetRandomName ()
-	{
-
-		return names[Mathf.RoundToInt(Random.Range(0, names.Length))];
-
-	}
-
 	private void UpdatePoints ()
 	{
 		if (controller != null) {
-			controller.ScoreVP(2);
+			controller.ScoreVP(1);
 
 		}
 		Invoke("UpdatePoints", 15);

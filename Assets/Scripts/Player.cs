@@ -20,6 +20,7 @@ public class Player : NetworkBehaviour {
 	private int victoryPoints;
 	private Vector3 respawnLoc;
 	private Camera respawnCam;
+	public bool gameStarted;
 
 	private bool alive = true;
 
@@ -28,14 +29,23 @@ public class Player : NetworkBehaviour {
 		activeCam = FindObjectOfType<Camera>();
 		curHealth = maxHealth;
 		animator = GetComponent<Animator>();
+		respawnLoc = GameObject.FindGameObjectWithTag("RespawnPoint").GetComponent<Transform>().position;
+		gameStarted = false;
+	}
+
+	public void SetRespawnCam (Camera cam)
+	{
+		respawnCam = cam;
+	}
+
+	public void StartGameHud ()
+	{
 		canvas = FindObjectOfType<Canvas>();
 		feed = GameObject.FindObjectOfType<FeedManager>();
 		healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Image>();
 		VPCounter = GameObject.FindGameObjectWithTag("VPCounter").GetComponent<Text>();
-		respawnLoc = GameObject.FindGameObjectWithTag("Respawn").GetComponent<Transform>().position;
-		respawnCam = activeCam;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -155,4 +165,11 @@ public class Player : NetworkBehaviour {
 	{
 		return name;
 	}
+
+	public void StartGame ()
+	{
+		gameStarted = true;
+		StartGameHud();
+	}
+
 }
