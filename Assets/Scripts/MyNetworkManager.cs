@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 public class MyNetworkManager : NetworkManager {
 
 	private bool waiting = false;
+	public GameObject gameManager;
 
 	public void MyStartHost ()
 	{
@@ -18,6 +19,7 @@ public class MyNetworkManager : NetworkManager {
 	public override void OnStartHost ()
 	{
 		Debug.Log(Time.timeSinceLevelLoad + " -- host started.");
+
 	}
 
 	public override void OnStartClient (NetworkClient myClient)
@@ -41,5 +43,12 @@ public class MyNetworkManager : NetworkManager {
 			print(".");
 			Invoke("MyWaiting", 1f);
 		}
+	}
+
+	public void StartGame ()
+	{
+		//NetworkServer.Spawn(gameManager);
+		GameManager game = GameObject.FindObjectOfType<GameManager>();
+		game.StartGame();
 	}
 }
