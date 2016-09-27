@@ -11,15 +11,21 @@ public class GameManager : MonoBehaviour {
 	private string[] names = {"Eadwig", "Salasmund", "Dannis", "Lideon", "Sully", "Randy", 
 										"Veniris", "Bandor", "Lyrra", "Rena", "Wanda", "Xekan", "Peato",
 										"Bandobald"};
-	public GameObject GameHud;
-	public GameObject LobbyHud;
-	public Camera respawnCam;
+	private GameObject GameHud;
+	private GameObject LobbyHud;
+	private Camera respawnCam;
 
-	void Start () {
-		SpawnPoint[] spawnObjects = GameObject.FindObjectsOfType<SpawnPoint>();
-		foreach (SpawnPoint obj in spawnObjects){
-			spawnPoints.Add(obj.transform.position);
-			cameras.Add(obj.spawnCamera);
+	private void Setup ()
+	{
+		//GameHud = GameObject.Find ("Game Hud");
+		//LobbyHud = GameObject.Find ("Lobby Hud");
+		SpawnPoint[] spawnObjects = GameObject.FindObjectsOfType<SpawnPoint> ();
+		foreach (SpawnPoint obj in spawnObjects) {
+			spawnPoints.Add (obj.transform.position);
+			cameras.Add (obj.spawnCamera);
+			if (obj.spawnCamera.name == "Hospital Camera") {
+				respawnCam = obj.spawnCamera;
+			}
 		}
 	}
 	
@@ -30,17 +36,23 @@ public class GameManager : MonoBehaviour {
 
 	public void StartGame ()
 	{
-		int rand = Random.Range(0, 6);
-		LobbyHud.gameObject.SetActive(false);
-		GameHud.gameObject.SetActive(true);
-		Player[] playerObjects = FindObjectsOfType<Player>();
-		foreach (Player obj in playerObjects){
-			players.Add(obj.GetComponent<Player>());
+		Setup();
+
+		//LobbyHud.gameObject.SetActive(false);
+		//GameHud.gameObject.SetActive(true);
+		Player[] playerObjects = FindObjectsOfType<Player> ();
+		foreach (Player obj in playerObjects) {
+			players.Add (obj.GetComponent<Player> ());
 		}
-		Debug.Log("Started a " + players.Count + " player game.");
+		Debug.Log ("Started a " + players.Count + " player game.");
 		foreach (Player p in players) {
+			int rand = Random.Range (0, 6);
 			p.SetName (GetRandomName ());
-			p.SetRespawnCam(respawnCam);
+			p.SetRespawnCam (respawnCam);
+			print (rand);
+			foreach (Camera c in cameras) {
+				print (c.name);
+			}
 			p.SwitchCamera(cameras[rand]);
 			p.transform.position = spawnPoints[rand];
 			p.StartGame();

@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 public class MyNetworkManager : NetworkManager {
 
 	private bool waiting = false;
-	public GameObject gameManager;
+	public GameManager gameManager;
 
 	public void MyStartHost ()
 	{
@@ -47,8 +47,9 @@ public class MyNetworkManager : NetworkManager {
 
 	public void StartGame ()
 	{
-		//NetworkServer.Spawn(gameManager);
-		GameManager game = GameObject.FindObjectOfType<GameManager>();
+		GameManager game = Instantiate(gameManager);
+		NetworkServer.Spawn(game.gameObject);
+		game = GameObject.FindObjectOfType<GameManager>();
 		game.StartGame();
 	}
 }
