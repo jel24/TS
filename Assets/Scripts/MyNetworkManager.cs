@@ -48,8 +48,5 @@ public class MyNetworkManager : NetworkManager {
 	public void StartGame ()
 	{
 		GameManager game = Instantiate(gameManager);
-		NetworkServer.Spawn(game.gameObject);
-		game = GameObject.FindObjectOfType<GameManager>();
-		game.StartGame();
 	}
 }

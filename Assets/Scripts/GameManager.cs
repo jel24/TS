@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : NetworkBehaviour {
 
 	
 	private List<Vector3> spawnPoints = new List<Vector3>();
@@ -14,6 +15,24 @@ public class GameManager : MonoBehaviour {
 	private GameObject GameHud;
 	private GameObject LobbyHud;
 	private Camera respawnCam;
+
+	private bool gameStarted;
+
+
+	void Start ()
+	{
+		Setup();
+
+		//LobbyHud.gameObject.SetActive(false);
+		//GameHud.gameObject.SetActive(true);
+		Player[] playerObjects = FindObjectsOfType<Player> ();
+		foreach (Player obj in playerObjects) {
+			players.Add (obj.GetComponent<Player> ());
+		}
+		Debug.Log ("Started a " + players.Count + " player game.");
+		gameStarted = true;
+		NetworkServer.Spawn(this.gameObject);
+	}
 
 	private void Setup ()
 	{
@@ -28,41 +47,26 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
+	public string GetRandomName ()
+	{
+		return names [Random.Range (0, names.Length)];
 	}
 
-	public void StartGame ()
+	public bool HasGameStarted ()
 	{
-		Setup();
-
-		//LobbyHud.gameObject.SetActive(false);
-		//GameHud.gameObject.SetActive(true);
-		Player[] playerObjects = FindObjectsOfType<Player> ();
-		foreach (Player obj in playerObjects) {
-			players.Add (obj.GetComponent<Player> ());
-		}
-		Debug.Log ("Started a " + players.Count + " player game.");
-		foreach (Player p in players) {
-			int rand = Random.Range (0, 6);
-			p.SetName (GetRandomName ());
-			p.SetRespawnCam (respawnCam);
-			print (rand);
-			foreach (Camera c in cameras) {
-				print (c.name);
-			}
-			p.SwitchCamera(cameras[rand]);
-			p.transform.position = spawnPoints[rand];
-			p.StartGame();
-		}
+		return gameStarted;
 	}
 
-	private string GetRandomName ()
-	{
+	public List<Camera> GetCameras(){
+		return cameras;
+	}
 
-		return names[Random.Range(0, names.Length)];
+	public List<Player> GetPlayers(){
+		return players;
+	}
 
+	public List<Vector3> GetSpawnPoints(){
+		return spawnPoints;
 	}
 }

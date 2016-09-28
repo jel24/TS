@@ -11,6 +11,7 @@ public class PlayerMovement : NetworkBehaviour {
 	private Player player;
 	private Animator animator;
 	private NetworkManager man;
+	private GameManager gameManager;
 
 
 	// Use this for initialization
@@ -18,12 +19,16 @@ public class PlayerMovement : NetworkBehaviour {
 		animator = this.GetComponent<Animator>();
 		player = this.GetComponent<Player>();
 		man = GameObject.FindObjectOfType<NetworkManager>();
+
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		if (isLocalPlayer && player.gameStarted) {
+		if (gameManager == null) {
+			gameManager = FindObjectOfType<GameManager> ();
+		} else {
+			if (isLocalPlayer && player.HasSpawned()){
 
 			float inputZ = CrossPlatformInputManager.GetAxis ("Vertical");
 			float inputX = CrossPlatformInputManager.GetAxis ("Horizontal");
@@ -62,6 +67,9 @@ public class PlayerMovement : NetworkBehaviour {
 
 
 		}
+		}
+
+
 
 	}
 

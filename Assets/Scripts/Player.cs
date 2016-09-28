@@ -20,7 +20,8 @@ public class Player : NetworkBehaviour {
 	private int victoryPoints;
 	private Vector3 respawnLoc;
 	private Camera respawnCam;
-	public bool gameStarted;
+	private GameManager gameManager;
+	private bool playerSpawned = false;
 
 	private bool alive = true;
 
@@ -30,7 +31,7 @@ public class Player : NetworkBehaviour {
 		curHealth = maxHealth;
 		animator = GetComponent<Animator>();
 		respawnLoc = GameObject.FindGameObjectWithTag("RespawnPoint").GetComponent<Transform>().position;
-		gameStarted = false;
+
 	}
 
 	public void SetRespawnCam (Camera cam)
@@ -47,8 +48,21 @@ public class Player : NetworkBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+	{
+		if (gameManager == null) {
+			gameManager = FindObjectOfType<GameManager> ();
+			if (gameManager) {
+
+			}
+		} else {
+
+			if (gameManager.HasGameStarted () && !playerSpawned) {
+				print("Game Started");
+				StartGame();
+			}
+		}
+
 	}
 
 	public void SwitchCamera (Camera newCam)
@@ -56,8 +70,8 @@ public class Player : NetworkBehaviour {
 
 		if (isLocalPlayer) {
 
-			Debug.Log("Current camera is " + activeCam);
-			Debug.Log("Switching cameras to " + newCam.name);
+			//Debug.Log("Current camera is " + activeCam);
+			//Debug.Log("Switching cameras to " + newCam.name);
 			newCam.gameObject.SetActive(true);
 			activeCam.gameObject.SetActive(false);
 			activeCam = newCam;
@@ -168,8 +182,17 @@ public class Player : NetworkBehaviour {
 
 	public void StartGame ()
 	{
-		gameStarted = true;
+		int rand = Random.Range (0, 5);
+		SetName (gameManager.GetRandomName ());
+		SetRespawnCam (respawnCam);
+		print (rand);
+		SwitchCamera(gameManager.GetCameras()[rand]);
+		transform.position = gameManager.GetSpawnPoints()[rand];
+		playerSpawned = true;
 		StartGameHud();
 	}
 
+	public bool HasSpawned(){
+		return playerSpawned;
+	}
 }
