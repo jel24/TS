@@ -60,9 +60,13 @@ public class PlayerMovement : NetworkBehaviour {
 
 			if (CrossPlatformInputManager.GetButtonDown("Fire2")){ // dodge
 
-					bool onOff = man.gameObject.activeSelf;
-					player.writeMessageLocal("Your network HUD is on: " + !onOff);
-					man.gameObject.SetActive(!onOff);
+					if (animator.GetBool("dodge") == false){
+						animator.SetBool("dodge", true);
+					}
+
+					//bool onOff = man.gameObject.activeSelf;
+					//player.writeMessageLocal("Your network HUD is on: " + !onOff);
+					//man.gameObject.SetActive(!onOff);
 			}
 
 

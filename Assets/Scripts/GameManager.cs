@@ -23,8 +23,8 @@ public class GameManager : NetworkBehaviour {
 	{
 		Setup();
 
-		//LobbyHud.gameObject.SetActive(false);
-		//GameHud.gameObject.SetActive(true);
+		LobbyHud.gameObject.SetActive(false);
+		GameHud.gameObject.SetActive(true);
 		Player[] playerObjects = FindObjectsOfType<Player> ();
 		foreach (Player obj in playerObjects) {
 			players.Add (obj.GetComponent<Player> ());
@@ -36,8 +36,8 @@ public class GameManager : NetworkBehaviour {
 
 	private void Setup ()
 	{
-		//GameHud = GameObject.Find ("Game Hud");
-		//LobbyHud = GameObject.Find ("Lobby Hud");
+		GameHud = GameObject.Find ("Game Hud");
+		LobbyHud = GameObject.Find ("Lobby Hud");
 		SpawnPoint[] spawnObjects = GameObject.FindObjectsOfType<SpawnPoint> ();
 		foreach (SpawnPoint obj in spawnObjects) {
 			spawnPoints.Add (obj.transform.position);

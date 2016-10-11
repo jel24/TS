@@ -17,12 +17,13 @@ public class Player : NetworkBehaviour {
 	private Canvas canvas;
 	private Text VPCounter;
 	private FeedManager feed;
+	private Text locationText;
 	private int victoryPoints;
 	private Vector3 respawnLoc;
 	private Camera respawnCam;
 	private GameManager gameManager;
 	private bool playerSpawned = false;
-
+	private string location;
 	private bool alive = true;
 
 	// Use this for initialization
@@ -31,7 +32,7 @@ public class Player : NetworkBehaviour {
 		curHealth = maxHealth;
 		animator = GetComponent<Animator>();
 		respawnLoc = GameObject.FindGameObjectWithTag("RespawnPoint").GetComponent<Transform>().position;
-
+		locationText = GameObject.Find("Location Text").GetComponent<Text>();
 	}
 
 	public void SetRespawnCam (Camera cam)
@@ -72,6 +73,8 @@ public class Player : NetworkBehaviour {
 
 			//Debug.Log("Current camera is " + activeCam);
 			//Debug.Log("Switching cameras to " + newCam.name);
+			location = newCam.transform.parent.gameObject.name;
+			locationText.text = location;
 			newCam.gameObject.SetActive(true);
 			activeCam.gameObject.SetActive(false);
 			activeCam = newCam;
