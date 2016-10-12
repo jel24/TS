@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour {
 
 		if (defender.GetComponent<Player> () && owner.GetComponent<Animator> ().GetBool ("attack")) {
 			Player defendingPlayer = defender.GetComponent<Player> ();
-			if (defendingPlayer != owner && internalCooldown == 0 && defendingPlayer.IsAlive ()) {
+			if (defendingPlayer != owner && internalCooldown == 0 && defendingPlayer.IsAlive () && !defendingPlayer.IsDodging()) {
 
 
 				// defendingPlayer.writeMessageLocal ("You took damage.\n");

@@ -198,4 +198,9 @@ public class Player : NetworkBehaviour {
 	public bool HasSpawned(){
 		return playerSpawned;
 	}
+
+	public bool IsDodging ()
+	{
+		return animator.GetBool("dodge");
+	}
 }
