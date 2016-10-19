@@ -25,6 +25,7 @@ public class Player : NetworkBehaviour {
 	private bool playerSpawned = false;
 	private string location;
 	private bool alive = true;
+	private ResourceManager resources;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +34,7 @@ public class Player : NetworkBehaviour {
 		animator = GetComponent<Animator>();
 		respawnLoc = GameObject.FindGameObjectWithTag("RespawnPoint").GetComponent<Transform>().position;
 		locationText = GameObject.Find("Location Text").GetComponent<Text>();
+		resources = GetComponent<ResourceManager>();
 	}
 
 	public void SetRespawnCam (Camera cam)
@@ -202,5 +204,10 @@ public class Player : NetworkBehaviour {
 	public bool IsDodging ()
 	{
 		return animator.GetBool("dodge");
+	}
+
+	public ResourceManager GetResourceManager ()
+	{
+		return resources;
 	}
 }
