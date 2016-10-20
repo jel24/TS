@@ -26,6 +26,7 @@ public class Player : NetworkBehaviour {
 	private string location;
 	private bool alive = true;
 	private ResourceManager resources;
+	private Canvas playerLabel;
 
 	// Use this for initialization
 	void Start () {
@@ -35,6 +36,7 @@ public class Player : NetworkBehaviour {
 		respawnLoc = GameObject.FindGameObjectWithTag("RespawnPoint").GetComponent<Transform>().position;
 		locationText = GameObject.Find("Location Text").GetComponent<Text>();
 		resources = GetComponent<ResourceManager>();
+		playerLabel = GetComponentInChildren<Canvas>();
 	}
 
 	public void SetRespawnCam (Camera cam)
@@ -209,5 +211,10 @@ public class Player : NetworkBehaviour {
 	public ResourceManager GetResourceManager ()
 	{
 		return resources;
+	}
+
+	public Canvas GetPlayerLabel ()
+	{
+		return playerLabel;
 	}
 }

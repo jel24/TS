@@ -42,6 +42,14 @@ public class PlayerMovement : NetworkBehaviour {
 						Vector3 targetPoint = transform.position + new Vector3 (inputX, 0f, inputZ);
 						transform.LookAt (targetPoint);
 						float cameraRotation = player.activeCam.transform.rotation.eulerAngles.y;
+						float labelRotation = player.GetPlayerLabel().transform.rotation.eulerAngles.y;
+
+						Canvas label = player.GetPlayerLabel();
+						Vector3 newRot = new Vector3 (0f, 45f, 0f);
+
+						label.transform.rotation = Quaternion.Euler(45f, 0f, 0f);
+
+
 						// print ("Camera is rotated at " + cameraRotation + " degrees. Adjusting.");
 						transform.RotateAround (transform.position, Vector3.up, cameraRotation);
 						transform.Translate (Vector3.forward * Time.deltaTime * speed);
