@@ -12,6 +12,7 @@ public class GameManager : NetworkBehaviour {
 	private string[] names = {"Eadwig", "Salasmund", "Dannis", "Lideon", "Sully", "Randy", 
 										"Veniris", "Bandor", "Lyrra", "Rena", "Wanda", "Xekan", "Peato",
 										"Bandobald"};
+	public StaticsManager statics;
 	private GameObject GameHud;
 	private GameObject LobbyHud;
 	private Camera respawnCam;
@@ -21,9 +22,12 @@ public class GameManager : NetworkBehaviour {
 
 	void Start ()
 	{
-		Setup();
+		Setup ();
 
-		LobbyHud.gameObject.SetActive(false);
+		if (LobbyHud) {
+			LobbyHud.gameObject.SetActive(false);
+		}
+
 		GameHud.gameObject.SetActive(true);
 		Player[] playerObjects = FindObjectsOfType<Player> ();
 		foreach (Player obj in playerObjects) {
@@ -36,15 +40,18 @@ public class GameManager : NetworkBehaviour {
 
 	private void Setup ()
 	{
-		GameHud = GameObject.Find ("Game Hud");
-		LobbyHud = GameObject.Find ("Lobby Hud");
+
+		statics = FindObjectOfType<StaticsManager> ();
+		GameHud = statics.gameHud;
+		if (statics.lobbyHud) {
+			LobbyHud = statics.lobbyHud;
+		}
+
+
 		SpawnPoint[] spawnObjects = GameObject.FindObjectsOfType<SpawnPoint> ();
 		foreach (SpawnPoint obj in spawnObjects) {
 			spawnPoints.Add (obj.transform.position);
 			cameras.Add (obj.spawnCamera);
-			if (obj.spawnCamera.name == "Hospital Camera") {
-				respawnCam = obj.spawnCamera;
-			}
 		}
 	}
 

@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class ThroneManager : MonoBehaviour {
 
 	private List<Player> playerGroup;
+	private Color visible = new Color(255, 255,255,1);
+	private Color invisible = new Color(255, 255,255,0);
 
 	private Player controller;
 
@@ -16,12 +19,20 @@ public class ThroneManager : MonoBehaviour {
 
 	void Update ()
 	{
-		if (playerGroup.Count == 1 && playerGroup[0] != controller) {
+		if (controller != null) {
+			if (playerGroup.Count == 1 && playerGroup [0] != controller) {
 
-			controller = playerGroup[0];
-			controller.writeMessage("Someone has claimed the throne.");
+			controller = playerGroup [0];
+			controller.writeMessage ("Someone has claimed the throne.");
+			controller.GetPlayerLabel ().GetComponentInChildren<Image> ().color = visible;
 
 		}
+
+			if (controller.IsAlive () == false) {
+				playerGroup.Remove(controller);
+			}
+		}
+
 	}
 
 	private void OnTriggerEnter (Collider collider)
@@ -44,6 +55,7 @@ public class ThroneManager : MonoBehaviour {
 
 		Player player = collider.GetComponent<Player> ();
 		if (player != null) {
+			player.GetPlayerLabel().GetComponentInChildren<Image>().color = invisible;
 			playerGroup.Remove (player);
 			if (player == controller) {
 				controller = null;

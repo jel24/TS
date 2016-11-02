@@ -136,7 +136,7 @@ public class Player : NetworkBehaviour {
 	private void Respawn ()
 	{
 		activeCam.gameObject.SetActive(false);
-		activeCam = respawnCam;
+		activeCam = gameManager.statics.cameras[16];
 		activeCam.gameObject.SetActive(true);
 		this.transform.position = respawnLoc;
 		this.alive = true;
