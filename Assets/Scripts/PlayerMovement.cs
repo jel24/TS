@@ -7,6 +7,7 @@ public class PlayerMovement : NetworkBehaviour {
 
 	public float speed;
 	public float turnSpeed;
+	public Fireball fireball;
 
 	private Player player;
 	private Animator animator;
@@ -79,6 +80,22 @@ public class PlayerMovement : NetworkBehaviour {
 					bool onOff = man.gameObject.activeSelf;
 					player.writeMessageLocal("Your network HUD is on: " + !onOff);
 					man.gameObject.SetActive(!onOff);
+				}
+
+				if (CrossPlatformInputManager.GetButtonDown ("Jump")) { // fireball
+
+					Vector3 playerPos = player.transform.position;
+
+					Vector3 fireballPos = new Vector3(playerPos.x, playerPos.y + 1f, playerPos.z);
+					Quaternion playerRot = player.transform.rotation;
+
+					Object ball = Instantiate(fireball, fireballPos, playerRot);
+					Fireball projectile = ball as Fireball;
+					projectile.owner = player;
+
+
+
+					//NetworkServer.Spawn();
 				}
 
 				if (animator.GetBool ("dodge")) {
