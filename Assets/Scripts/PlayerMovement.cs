@@ -29,7 +29,7 @@ public class PlayerMovement : NetworkBehaviour {
 		if (gameManager == null) {
 			gameManager = FindObjectOfType<GameManager> ();
 		} else {
-			if (isLocalPlayer && player.HasSpawned ()) {
+			if (isLocalPlayer && player.HasSpawned () && player.IsAlive()) {
 
 				float inputZ = CrossPlatformInputManager.GetAxis ("Vertical");
 				float inputX = CrossPlatformInputManager.GetAxis ("Horizontal");
@@ -84,6 +84,7 @@ public class PlayerMovement : NetworkBehaviour {
 
 				if (CrossPlatformInputManager.GetButtonDown ("Jump")) { // fireball
 
+
 					Vector3 playerPos = player.transform.position;
 
 					Vector3 fireballPos = new Vector3(playerPos.x, playerPos.y + 1f, playerPos.z);
@@ -94,8 +95,7 @@ public class PlayerMovement : NetworkBehaviour {
 					projectile.owner = player;
 
 
-
-					//NetworkServer.Spawn();
+					NetworkServer.Spawn(ball as GameObject);
 				}
 
 				if (animator.GetBool ("dodge")) {
