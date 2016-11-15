@@ -8,7 +8,7 @@ public class Player : NetworkBehaviour {
 	public bool entering = false;
 	public Camera activeCam;
 	public string name;
-
+	public Fireball fireball;
 	public int maxHealth;
 
 	private Image healthBar;
@@ -216,5 +216,22 @@ public class Player : NetworkBehaviour {
 	public Canvas GetPlayerLabel ()
 	{
 		return playerLabel;
+	}
+
+	[Command]
+	public void CmdSpawnFireball ()
+	{
+		Vector3 playerPos = transform.position;
+
+		Vector3 fireballPos = new Vector3 (playerPos.x, playerPos.y + 1.5f, playerPos.z);
+		Quaternion playerRot = transform.rotation;
+
+		Object ball = Instantiate (fireball, fireballPos, playerRot);
+		Fireball projectile = ball as Fireball;
+		projectile.owner = this;
+
+		Debug.Log (ball.name);
+		NetworkServer.Spawn(projectile.gameObject);
+
 	}
 }

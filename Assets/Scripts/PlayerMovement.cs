@@ -84,18 +84,9 @@ public class PlayerMovement : NetworkBehaviour {
 
 				if (CrossPlatformInputManager.GetButtonDown ("Jump")) { // fireball
 
-
-					Vector3 playerPos = player.transform.position;
-
-					Vector3 fireballPos = new Vector3(playerPos.x, playerPos.y + 1f, playerPos.z);
-					Quaternion playerRot = player.transform.rotation;
-
-					Object ball = Instantiate(fireball, fireballPos, playerRot);
-					Fireball projectile = ball as Fireball;
-					projectile.owner = player;
+					player.CmdSpawnFireball();
 
 
-					NetworkServer.Spawn(ball as GameObject);
 				}
 
 				if (animator.GetBool ("dodge")) {
