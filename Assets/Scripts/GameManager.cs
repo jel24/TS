@@ -76,4 +76,6 @@ public class GameManager : NetworkBehaviour {
 	public List<Vector3> GetSpawnPoints(){
 		return spawnPoints;
 	}
+
+
 }

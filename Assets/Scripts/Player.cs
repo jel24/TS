@@ -98,14 +98,13 @@ public class Player : NetworkBehaviour {
 
 	public void TakeDamage (int damage)
 	{
-		curHealth -= damage;
+		if (IsAlive ()) {
+			curHealth -= damage;
+			UpdateHealthBar();
 
-		UpdateHealthBar();
-
-		if (curHealth <= 0) { // death
-
-			Die();
-
+			if (curHealth <= 0) { // death
+				Die();
+			}
 		}
 	}
 
@@ -219,7 +218,7 @@ public class Player : NetworkBehaviour {
 	}
 
 	[Command]
-	public void CmdSpawnFireball ()
+	public void CmdSpawnFireball (string playerID)
 	{
 		Vector3 playerPos = transform.position;
 
@@ -232,6 +231,5 @@ public class Player : NetworkBehaviour {
 
 		Debug.Log (ball.name);
 		NetworkServer.Spawn(projectile.gameObject);
-
 	}
 }

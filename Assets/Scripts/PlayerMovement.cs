@@ -84,7 +84,7 @@ public class PlayerMovement : NetworkBehaviour {
 
 				if (CrossPlatformInputManager.GetButtonDown ("Jump")) { // fireball
 
-					player.CmdSpawnFireball();
+					player.CmdSpawnFireball(player.name);
 
 
 				}

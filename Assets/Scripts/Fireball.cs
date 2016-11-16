@@ -10,11 +10,19 @@ public class Fireball : MonoBehaviour {
 
 	private AudioSource audioSource;
 	private float birth;
+	private bool init;
 	private bool active;
 
 	void Start() {
 		audioSource = this.GetComponent<AudioSource>();
 		birth = Time.time;
+		init = true;
+		active = false;
+		Invoke("Activate", .25f);
+	}
+
+	private void Activate ()
+	{
 		active = true;
 	}
 
@@ -22,18 +30,18 @@ public class Fireball : MonoBehaviour {
 	void Update ()
 	{
 		this.transform.Translate (Vector3.forward * Time.deltaTime * velocity);
-		if (Time.time - birth > 5) {
+		if (Time.time - birth > 3) {
 			Explode();
 		}
 	}
 
-	public void OnCollisionEnter (Collision c)
+	public void OnTriggerEnter (Collider c)
 	{
-		if (c.collider.GetComponent<Player>() != owner) {
+		Debug.Log("Triggered!");
+		if (c.GetComponent<Player>()) {
 			Debug.Log("Collided!");
 			Explode();
 		}
-		
 
 	}
 
@@ -50,7 +58,8 @@ public class Fireball : MonoBehaviour {
 			for (int i = 0; i < hitTargets.Length; i++) {
 				Player player = hitTargets [i].GetComponent<Player> ();
 				if (player != null) {
-					hitTargets[i].GetComponent<Player>().TakeDamage(damage);
+					hitTargets [i].GetComponent<Player> ().TakeDamage (damage);
+					player.writeMessage ("Fireball exploded and hit " + player.name);
 				}
 			}
 
